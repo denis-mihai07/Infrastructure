@@ -9,7 +9,7 @@ services:
     container_name: global-tunnel
     restart: always
     environment:
-      - TUNNEL_TOKEN=eyJhIjoiMmQxYzAzNGRkZDA1OGMxN2ZhZmEyZmQxZjExZjcwYmQiLCJ0IjoiNmNlZjFjYmYtNDZiNy00ZmI3LTg2ZWUtZTBmODAzYjQxNjczIiwicyI6Ik9UYzFNVGRpT0dFdE5qa3lZeTAwWTJRM0xXSTNPR1V0WXpFek56bGhaak01TURVMyJ9
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     command: tunnel run
     networks:
       - gateway_net
@@ -35,7 +35,3 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    
-
-
-
