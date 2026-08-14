@@ -1,0 +1,41 @@
+networks:
+  gateway_net:
+    name: gateway_net
+    driver: bridge
+
+services:
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: global-tunnel
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=eyJhIjoiMmQxYzAzNGRkZDA1OGMxN2ZhZmEyZmQxZjExZjcwYmQiLCJ0IjoiNmNlZjFjYmYtNDZiNy00ZmI3LTg2ZWUtZTBmODAzYjQxNjczIiwicyI6Ik9UYzFNVGRpT0dFdE5qa3lZeTAwWTJRM0xXSTNPR1V0WXpFek56bGhaak01TURVMyJ9
+    command: tunnel run
+    networks:
+      - gateway_net
+
+  nginx:
+    image: nginx:latest
+    container_name: global-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs
+    networks:
+      - gateway_net
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    
+
+
+
