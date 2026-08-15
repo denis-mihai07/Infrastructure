@@ -15,7 +15,7 @@ services:
       - gateway_net
 
   nginx:
-    image nginx:latest
+    image: nginx:latest
     container_name: global-nginx
     restart: always
     ports:
