@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v4
-
       - name: Connect to Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -20,7 +17,7 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Execute Remote SSH Commands
+      - name: Connect to Homelab Server and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -29,5 +26,8 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ~/Infrastructure
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
             docker compose up -d --remove-orphans
+            docker image prune -a -f
